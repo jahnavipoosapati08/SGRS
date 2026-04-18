@@ -1,0 +1,23 @@
+grievances = []
+
+while True:
+    print("\n1. Add Grievance")
+    print("2. View Grievances")
+    print("3. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == '1':
+        name = input("Enter Name: ")
+        reg = input("Enter Reg No: ")
+        category = input("Enter Category: ")
+        desc = input("Enter Description: ")
+
+        grievances.append([name, reg, category, desc])
+
+    elif choice == '2':
+        for g in grievances:
+            print(g)
+
+    elif choice == '3':
+        break
