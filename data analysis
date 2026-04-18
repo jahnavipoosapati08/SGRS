@@ -1,0 +1,11 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {
+    "Category": ["Academic", "Hostel", "Academic", "Admin"],
+}
+
+df = pd.DataFrame(data)
+
+df["Category"].value_counts().plot(kind="bar")
+plt.show()
