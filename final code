@@ -1,0 +1,215 @@
+# STUDENT GRIEVANCE REDRESSAL SYSTEM (SGRS)
+
+import csv
+import os
+from datetime import datetime
+
+FILE_NAME = "grievances.csv"
+
+# ---------- CLASS ----------
+class Grievance:
+    def __init__(self, gid, name, reg_no, dept, category, description, status="Pending", date=None):
+        self.gid = int(gid)
+        self.name = name
+        self.reg_no = reg_no
+        self.dept = dept
+        self.category = category
+        self.description = description
+        self.status = status
+        self.date = date if date else datetime.now().strftime("%Y-%m-%d")
+
+    def to_list(self):
+        return [
+            self.gid, self.name, self.reg_no, self.dept,
+            self.category, self.description, self.status, self.date
+        ]
+
+
+# ---------- GLOBAL DATA ----------
+grievances = []
+unique_ids = set()
+logs = []
+
+# ---------- FILE HANDLING ----------
+def load_data():
+    if not os.path.exists(FILE_NAME):
+        return
+
+    try:
+        with open(FILE_NAME, "r") as f:
+            reader = csv.reader(f)
+            next(reader, None)  # skip header
+
+            for row in reader:
+                if len(row) < 8:
+                    continue  # skip bad rows
+
+                gid, name, reg_no, dept, category, description, status, date = row
+
+                g = Grievance(
+                    gid, name, reg_no, dept,
+                    category, description, status, date
+                )
+
+                grievances.append(g)
+                unique_ids.add(int(gid))
+
+    except Exception as e:
+        print(" Error loading file:", e)
+
+
+def save_data():
+    try:
+        with open(FILE_NAME, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["ID", "Name", "RegNo", "Dept", "Category", "Description", "Status", "Date"])
+
+            for g in grievances:
+                writer.writerow(g.to_list())
+
+    except Exception as e:
+        print("Error saving file:", e)
+
+
+# ---------- FUNCTIONS ----------
+def generate_id():
+    return max(unique_ids) + 1 if unique_ids else 1
+
+
+def add_grievance():
+    try:
+        gid = generate_id()
+
+        name = input("Enter Name: ")
+        reg_no = input("Enter Reg No: ")
+        dept = input("Enter Department: ")
+        category = input("Enter Category: ")
+        description = input("Enter Description: ")
+
+        g = Grievance(gid, name, reg_no, dept, category, description)
+
+        grievances.append(g)
+        unique_ids.add(gid)
+        logs.append((gid, "Added"))
+
+        print(" Grievance Added Successfully!")
+
+    except Exception as e:
+        print("Error:", e)
+
+
+def view_grievances():
+    if not grievances:
+        print("No records found.")
+        return
+
+    for g in grievances:
+        print("\n----------------------")
+        print("ID:", g.gid)
+        print("Name:", g.name)
+        print("Reg No:", g.reg_no)
+        print("Dept:", g.dept)
+        print("Category:", g.category)
+        print("Description:", g.description)
+        print("Status:", g.status)
+        print("Date:", g.date)
+
+
+def search_grievance():
+    key = input("Enter Reg No or Name: ")
+
+    found = False
+    for g in grievances:
+        if g.reg_no == key or g.name.lower() == key.lower():
+            print("\nFound:")
+            print(g.to_list())
+            found = True
+
+    if not found:
+        print(" No grievance found.")
+
+
+def update_grievance():
+    try:
+        gid = int(input("Enter ID: "))
+
+        for g in grievances:
+            if g.gid == gid:
+                new_status = input("Enter new status: ")
+                g.status = new_status
+                logs.append((gid, "Updated"))
+                print(" Updated successfully!")
+                return
+
+        print(" ID not found.")
+
+    except ValueError:
+        print(" Invalid ID input")
+
+
+def delete_grievance():
+    try:
+        gid = int(input("Enter ID: "))
+
+        for g in grievances:
+            if g.gid == gid:
+                grievances.remove(g)
+                unique_ids.remove(gid)
+                logs.append((gid, "Deleted"))
+                print(" Deleted successfully!")
+                return
+
+        print(" ID not found.")
+
+    except ValueError:
+        print(" Invalid ID input")
+
+
+def show_logs():
+    if not logs:
+        print("No logs available.")
+        return
+
+    print("\nActivity Logs:")
+    for log in logs:
+        print("ID:", log[0], "| Action:", log[1])
+
+
+# ---------- MENU ----------
+def menu():
+    load_data()
+
+    while True:
+        print("\n===== SGRS MENU =====")
+        print("1. Add Grievance")
+        print("2. View Grievances")
+        print("3. Search Grievance")
+        print("4. Update Status")
+        print("5. Delete Grievance")
+        print("6. Show Logs")
+        print("7. Save & Exit")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            add_grievance()
+        elif choice == "2":
+            view_grievances()
+        elif choice == "3":
+            search_grievance()
+        elif choice == "4":
+            update_grievance()
+        elif choice == "5":
+            delete_grievance()
+        elif choice == "6":
+            show_logs()
+        elif choice == "7":
+            save_data()
+            print(" Data saved. Exiting...")
+            break
+        else:
+            print(" Invalid choice!")
+
+
+# ---------- RUN ----------
+menu()
