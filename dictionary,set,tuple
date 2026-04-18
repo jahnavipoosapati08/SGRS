@@ -1,0 +1,25 @@
+grievances = []
+ids = set()
+logs = []
+
+def add():
+    gid = int(input("Enter ID: "))
+    if gid in ids:
+        print("Duplicate ID!")
+        return
+
+    ids.add(gid)
+
+    g = {
+        "id": gid,
+        "name": input("Name: "),
+        "category": input("Category: "),
+        "status": "Submitted"
+    }
+
+    grievances.append(g)
+    logs.append((gid, "Added"))
+
+add()
+print(grievances)
+print("Logs:", logs)
