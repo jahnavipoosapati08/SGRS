@@ -1,0 +1,35 @@
+grievances = []
+
+def add_grievance():
+    g = {
+        "name": input("Name: "),
+        "reg": input("Reg No: "),
+        "category": input("Category: "),
+        "desc": input("Description: ")
+    }
+    grievances.append(g)
+
+def view_grievances():
+    for g in grievances:
+        print(g)
+
+def delete_grievance():
+    reg = input("Enter Reg No: ")
+    global grievances
+    grievances = [g for g in grievances if g["reg"] != reg]
+
+def update_grievance():
+    reg = input("Enter Reg No: ")
+    for g in grievances:
+        if g["reg"] == reg:
+            g["category"] = input("New Category: ")
+
+while True:
+    print("\n1.Add 2.View 3.Delete 4.Update 5.Exit")
+    ch = input()
+
+    if ch == '1': add_grievance()
+    elif ch == '2': view_grievances()
+    elif ch == '3': delete_grievance()
+    elif ch == '4': update_grievance()
+    elif ch == '5': break
