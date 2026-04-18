@@ -1,0 +1,25 @@
+grievances = []
+
+def add():
+    g = {
+        "name": input("Name: "),
+        "reg": input("Reg No: "),
+        "category": input("Category: "),
+        "desc": input("Description: ")
+    }
+    grievances.append(g)
+
+def view():
+    for g in grievances:
+        print(g)
+
+def search():
+    reg = input("Enter Reg No to search: ")
+    for g in grievances:
+        if g["reg"] == reg:
+            print(g)
+
+add()
+add()
+view()
+search()
