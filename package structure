@@ -1,0 +1,3 @@
+# student.py
+def student_menu():
+    print("Student Menu")
