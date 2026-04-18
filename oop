@@ -1,0 +1,14 @@
+class Grievance:
+    def __init__(self, gid, name, reg, category, desc):
+        self.id = gid
+        self.name = name
+        self.reg = reg
+        self.category = category
+        self.desc = desc
+        self.status = "Pending"
+
+    def display(self):
+        print(self.id, self.name, self.category, self.status)
+
+g1 = Grievance(1, "Rahul", "101", "Academic", "Marks issue")
+g1.display()
