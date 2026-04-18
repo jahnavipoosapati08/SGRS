@@ -1,0 +1,7 @@
+def add():
+    print("Add grievance")
+
+# main.py
+import grievance
+
+grievance.add()
