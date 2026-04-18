@@ -1,0 +1,15 @@
+import csv
+
+def save():
+    with open("grievances.csv", "w", newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["Name", "Reg", "Category"])
+
+        writer.writerow(["Rahul", "101", "Academic"])
+
+def read():
+    with open("grievances.csv", "r") as f:
+        print(f.read())
+
+save()
+read()
